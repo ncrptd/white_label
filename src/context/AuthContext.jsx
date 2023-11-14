@@ -11,7 +11,11 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const userData = localStorage.getItem('user')
+    const userData = localStorage.getItem('user');
+    let token;
+    if (userData) {
+        token = JSON.parse(userData).token
+    }
     const [user, setUser] = useState(userData ? JSON.parse(userData).result : null);
     const [error, setError] = useState(null);
 
@@ -56,7 +60,7 @@ export const AuthProvider = ({ children }) => {
             await axios.post('https://whitelabellogin.rockeybiswas.repl.co/api/forgotPassword', { email });
 
         } catch (error) {
-            console.error('hello', error)
+            console.error(error)
             throw error
         }
     }
@@ -72,8 +76,10 @@ export const AuthProvider = ({ children }) => {
 
     const updateName = async (data) => {
         try {
-
-            const res = await axios.post('https://whitelabellogin.rockeybiswas.repl.co/api/user/updateName', data);
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+            const res = await axios.post('https://whitelabellogin.rockeybiswas.repl.co/api/user/updateName', data, { headers });
             if (res.status === 200) {
                 const resData = res.data;
                 setUser(resData.user);

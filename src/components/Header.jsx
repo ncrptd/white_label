@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
     const { logout, user } = useAuth();
-
     const navigate = useNavigate();
     const handleLogout = () => {
         logout(navigate)
@@ -19,6 +18,7 @@ const Header = () => {
                     </span>
                 </div>
                 <Link to='/nameUpdate' className="bg-green-500 text-white-800 py-2 px-4 rounded">Edit</Link>
+                {user?.role === 'admin' && <Link to='/admin/userManagement' className="bg-blue-500 text-white-800 py-2 px-4 rounded">Admin</Link>}
                 <button className="bg-red-500 text-white-800 py-2 px-4 rounded" onClick={handleLogout}>Logout</button>
             </div>
         </header>
